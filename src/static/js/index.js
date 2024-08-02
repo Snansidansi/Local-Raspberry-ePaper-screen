@@ -15,6 +15,7 @@ let drawing = false;
 let startX;
 let startY;
 let mode = ActionTypes.NONE;
+let uploadingImage = false;
 
 canvas.addEventListener("mousedown", startDrawing);
 canvas.addEventListener("mouse" + "up", mouseUpEvent);
@@ -120,9 +121,34 @@ function clearCanvas() {
 }
 
 function upload() {
-    const anchor = document.createElement("a");
-    anchor.href = canvas.toDataURL("image/png");
-    anchor.download = "canvas";
-    anchor.click();
-    anchor.remove();
-}
+    if (uploadingImage) {
+        return;
+    }
+    uploadingImage = true;
+
+    const canvasDataURL = canvas.toDataURL("image/png");
+    fetch("/upload-image", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({image: canvasDataURL})
+    })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Upload successful")
+            }
+            else {
+                console.log("Upload failed")
+            }
+            uploadingImage = false;
+            let uploadBtn = document.getElementById("uploadBtn");
+            uploadBtn.disabled = true;
+            setTimeout(() => {uploadBtn.disabled = false}, 4000)
+        })
+        .catch(error => {
+            console.error("Error when uploading image: ", error);
+            uploadingImage = false;
+        })
+ }
