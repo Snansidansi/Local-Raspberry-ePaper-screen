@@ -144,8 +144,6 @@ function upload() {
             }
             uploadingImage = false;
             let uploadBtn = document.getElementById("uploadBtn");
-            uploadBtn.disabled = true;
-            setTimeout(() => {uploadBtn.disabled = false}, 4000)
         })
         .catch(error => {
             console.error("Error when uploading image: ", error);
