@@ -1,8 +1,7 @@
 import threading
-import time
 from time import sleep
 
-import epd1in54_V2
+from . import epd1in54_V2
 from PIL import Image
 import os.path
 
@@ -51,5 +50,5 @@ def enable_automatic_refresh(path: str):
 
 
 def automatic_refresh(path: str):
-    time.sleep(60 * 60 * 6)  # Refresh every 6h (manufacturer recommendation: refresh once between 3 min and 24 hours
+    sleep(60 * 60 * 6)  # Refresh every 6h (manufacturer recommendation: refresh once between 3 min and 24 hours
     display_image(path)
