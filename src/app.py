@@ -1,6 +1,6 @@
 import base64
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 
 import screen.screen_controller as screen_controller
 
@@ -28,6 +28,12 @@ def upload_image():
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'success': False}), 500
+
+
+@app.route('/clear-screen', methods=['POST'])
+def clear_screen():
+    screen_controller.clear()
+    return redirect(url_for("index"))
 
 
 if __name__ == "__main__":
