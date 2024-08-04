@@ -42,6 +42,7 @@ def convert_image(path: str) -> Image:
 
 def clear():
     epd = init()
+    epd.Clear()
     epd.sleep()
 
 
