@@ -1,6 +1,13 @@
+import threading
+import time
+from time import sleep
+
 import epd1in54_V2
 from PIL import Image
 import os.path
+
+
+refreshing = False
 
 
 def init() -> epd1in54_V2.EPD:
@@ -11,9 +18,14 @@ def init() -> epd1in54_V2.EPD:
 
 def display_image(path: str):
     if not os.path.isfile(path):
-        return
+        clear()
+
+    global refreshing
+    while refreshing:
+        sleep(2)  # Refresh time of the e-Paper screen
 
     # Init
+    refreshing = True
     epd = init()
 
     # Display image
@@ -21,6 +33,7 @@ def display_image(path: str):
 
     # Sleep display
     epd.sleep()
+    refreshing = False
 
 
 def convert_image(path: str) -> Image:
@@ -32,3 +45,11 @@ def clear():
     epd = init()
     epd.sleep()
 
+
+def enable_automatic_refresh(path: str):
+    threading.Thread(target=automatic_refresh).start()
+
+
+def automatic_refresh(path: str):
+    time.sleep(60 * 60 * 6)  # Refresh every 6h (manufacturer recommendation: refresh once between 3 min and 24 hours
+    display_image(path)
