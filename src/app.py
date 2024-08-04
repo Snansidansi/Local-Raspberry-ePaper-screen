@@ -2,12 +2,16 @@ import base64
 
 from flask import Flask, render_template, request, jsonify
 
+import screen.screen_controller as screen_controller
+
 app = Flask(__name__)
+image_path = "current_image.png"
 
 
 @app.route('/')
 def index():
     return render_template("index.html")
+
 
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
@@ -16,8 +20,10 @@ def upload_image():
         image_data = data['image'].replace('data:image/png;base64,', '')
         image_data = base64.b64decode(image_data)
 
-        with open("current_image.png", "wb") as file:
+        with open(image_path, "wb") as file:
             file.write(image_data)
+
+        screen_controller.display_image(image_path)
 
         return jsonify({'success': True})
     except Exception as e:
@@ -25,4 +31,5 @@ def upload_image():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    screen_controller.enable_automatic_refresh(image_path)
+    app.run(debug=True, host='0.0.0.0')
