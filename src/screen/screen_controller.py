@@ -46,9 +46,10 @@ def clear():
 
 
 def enable_automatic_refresh(path: str):
-    threading.Thread(target=automatic_refresh).start()
+    threading.Thread(target=automatic_refresh, args=(path, )).start()
 
 
 def automatic_refresh(path: str):
-    sleep(60 * 60 * 6)  # Refresh every 6h (manufacturer recommendation: refresh once between 3 min and 24 hours
-    display_image(path)
+    while True:
+        sleep(60 * 60 * 6)  # Refresh every 6h (manufacturer recommendation: refresh once between 3 min and 24 hours
+        display_image(path)
