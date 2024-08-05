@@ -150,6 +150,7 @@ function switchInput() {
     textInputMode.style.display = "initial";
     switchInputBtn.innerHTML = "Switch to draw input";
     textInput = true;
+    mode = ActionTypes.NONE;
 }
 
 function calcStartPos(e) {
