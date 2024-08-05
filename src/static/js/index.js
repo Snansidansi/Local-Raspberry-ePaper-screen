@@ -257,36 +257,34 @@ function upload() {
     }
     uploadingImage = true;
 
-    if (textInput) {
-        let rows = Array.from(document.getElementById("rowInputDiv").children,
-            row => row.value);
+    let rows = Array.from(document.getElementById("rowInputDiv").children,
+        row => row.value);
 
-        fetch("/save-text", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                rows: rowCountInput.value,
-                fontSize: fontSizeInputText.value,
-                separate: document.getElementById("separatorLine").checked,
-                distribute: document.getElementById("distributeHorizontally").checked,
-                content: rows
-            })
+    fetch("/save-text", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            rows: rowCountInput.value,
+            fontSize: fontSizeInputText.value,
+            separate: document.getElementById("separatorLine").checked,
+            distribute: document.getElementById("distributeHorizontally").checked,
+            content: rows
         })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    console.log("Upload of text successful");
-                }
-                else {
-                    console.log("Upload of text failed: " + data.message);
-                }
-            })
-            .catch (error => {
-                console.error("Error when uploading text: ", error);
-            })
-    }
+    })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Upload of text successful");
+            }
+            else {
+                console.log("Upload of text failed: " + data.message);
+            }
+        })
+        .catch (error => {
+            console.error("Error when uploading text: ", error);
+        })
 
     const canvasDataURL = canvas.toDataURL("image/png");
     fetch("/upload-image", {
