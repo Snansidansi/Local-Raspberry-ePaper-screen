@@ -52,11 +52,15 @@ window.onload = function() {
         })
         .then(data => {
             rowCountInput.value = data.rows;
-            setTextFontMax()
+            setTextFontMax();
             fontSizeInputText.value = data.fontSize;
-            setRowMax()
-            resizeInputRows()
-            showInputRows()
+            setRowMax();
+
+            resizeInputRows();
+            showInputRows();
+
+            document.getElementById("separatorLine").checked = data.separate;
+            document.getElementById("distributeHorizontally").checked = data.distribute;
 
             let inputRows = document.getElementById("rowInputDiv").children;
             for (let i = 0; i < data.content.length; i++) {
@@ -265,6 +269,8 @@ function upload() {
             body: JSON.stringify({
                 rows: rowCountInput.value,
                 fontSize: fontSizeInputText.value,
+                separate: document.getElementById("separatorLine").checked,
+                distribute: document.getElementById("distributeHorizontally").checked,
                 content: rows
             })
         })

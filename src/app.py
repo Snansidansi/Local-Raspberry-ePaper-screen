@@ -53,12 +53,16 @@ def save_text():
     try:
         data = request.get_json()
         rows = data['rows']
-        fontSize = data['fontSize']
+        font_size = data['fontSize']
+        separate = data['separate']
+        distribute = data['distribute']
         content = data['content']
 
         with open(text_path, "w") as file:
             file.write(rows + "\n")
-            file.write(fontSize + "\n")
+            file.write(font_size + "\n")
+            file.write(str(separate) + "\n")
+            file.write(str(distribute) + "\n")
             for element in content:
                 file.write(element + "\n")
 
@@ -73,11 +77,15 @@ def get_text():
         with open(text_path, "r") as file:
             rowCount = file.readline().replace("\n", "")
             fontSize = file.readline().replace("\n", "")
+            separate = file.readline().replace("\n", "")
+            distribute = file.readline().replace("\n", "")
             content = file.readlines()
 
         return jsonify({
             'rows': int(rowCount),
             'fontSize': int(fontSize),
+            'separate': False if separate == "False" else True,
+            'distribute': False if distribute == "False" else True,
             'content': content
         }), 200
 
