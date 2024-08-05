@@ -93,7 +93,7 @@ function drawRowsOnScreen() {
     if (separator && rows.length > 1) {
         for (let i = 0; i < rows.length - 1; i++) {
             let y = rowSpace * (i + 1) + rowSpace / 2;
-            ctx.fillRect(0, y, canvas.width, 1);
+            ctx.fillRect(0, Math.round(y) - 1, canvas.width, 2);
         }
     }
 }
