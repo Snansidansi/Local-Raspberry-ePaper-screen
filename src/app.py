@@ -6,8 +6,8 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 import screen.screen_controller as screen_controller
 
 app = Flask(__name__)
-image_path = "current_image.png"
-
+image_path = "data/current_image.png"
+text_path = "data/current_text.txt"
 
 @app.route('/')
 def index():
@@ -28,7 +28,7 @@ def upload_image():
 
         return jsonify({'success': True})
     except Exception as e:
-        return jsonify({'success': False}), 500
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 
 @app.route('/clear-screen', methods=['POST'])
@@ -48,6 +48,28 @@ def get_image():
     abort(404)
 
 
+@app.route('/save-text', methods=['POST'])
+def save_text():
+    try:
+        data = request.get_json()
+        rows = data['rows']
+        fontSize = data['fontSize']
+        content = data['content']
+
+        with open(text_path, "w") as file:
+            file.write(rows + "\n")
+            file.write(fontSize + "\n")
+            for element in content:
+                file.write(element + "\n")
+
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+
 if __name__ == "__main__":
     screen_controller.enable_automatic_refresh(image_path)
+    if not os.path.isdir("data"):
+        os.mkdir("data")
+
     app.run(debug=False, host='0.0.0.0')
