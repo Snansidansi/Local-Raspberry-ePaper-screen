@@ -93,8 +93,8 @@ def get_text():
 
 
 if __name__ == "__main__":
-    screen_controller.enable_automatic_refresh(image_path)
     if not os.path.isdir("data"):
         os.mkdir("data")
 
+    screen_controller.enable_automatic_refresh(image_path)
     app.run(debug=False, host='0.0.0.0')
