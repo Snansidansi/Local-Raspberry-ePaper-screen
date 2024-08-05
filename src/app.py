@@ -35,6 +35,9 @@ def upload_image():
 def clear_screen():
     screen_controller.clear()
     os.remove(image_path)
+
+    if os.path.exists(image_path):
+        os.remove(image_path)
     return redirect(url_for("index"))
 
 
