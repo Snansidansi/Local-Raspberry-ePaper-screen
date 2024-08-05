@@ -1,6 +1,7 @@
 import base64
+import os
 
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, send_file, abort
 
 import screen.screen_controller as screen_controller
 
@@ -33,7 +34,15 @@ def upload_image():
 @app.route('/clear-screen', methods=['POST'])
 def clear_screen():
     screen_controller.clear()
+    os.remove(image_path)
     return redirect(url_for("index"))
+
+
+@app.route('/image')
+def get_image():
+    if os.path.exists(image_path):
+        return send_file(image_path)
+    abort(404)
 
 
 if __name__ == "__main__":

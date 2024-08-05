@@ -21,6 +21,15 @@ canvas.addEventListener("mousedown", startDrawing);
 canvas.addEventListener("mouse" + "up", mouseUpEvent);
 clearCanvas();
 
+window.onload = function() {
+    const image = new Image();
+    image.onload = function() {
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    }
+    image.onerror = function () {}
+    image.src = "/image"
+}
+
 function calcStartPos(e) {
     startX = e.clientX - canvasBoundingRec.left;
     startY = e.clientY - canvasBoundingRec.top;
