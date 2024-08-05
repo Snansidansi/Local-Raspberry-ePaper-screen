@@ -67,6 +67,24 @@ def save_text():
         return jsonify({'success': False, 'message': str(e)}), 500
 
 
+@app.route('/get-text')
+def get_text():
+    try:
+        with open(text_path, "r") as file:
+            rowCount = file.readline().replace("\n", "")
+            fontSize = file.readline().replace("\n", "")
+            content = file.readlines()
+
+        return jsonify({
+            'rows': int(rowCount),
+            'fontSize': int(fontSize),
+            'content': content
+        }), 200
+
+    except IOError:
+        abort(404)
+
+
 if __name__ == "__main__":
     screen_controller.enable_automatic_refresh(image_path)
     if not os.path.isdir("data"):

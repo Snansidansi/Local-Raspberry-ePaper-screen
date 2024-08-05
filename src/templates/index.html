@@ -9,11 +9,11 @@
 <body>
   <h1>Create the new content for the display</h1>
   <button id="switchInputBtn" onclick="switchInput()">Switch to text input</button>
-  <div class="flex-container">
-    <label for="fontSize">Font size:</label>
-    <input type="number" id="fontSize" name="fontSize" min="1" max="50" value="11">
-  </div>
   <div id="imageInputDiv">
+    <div class="flex-container">
+      <label for="fontSizeDraw">Font size:</label>
+      <input type="number" id="fontSizeDraw" name="fontSizeDraw" min="1" max="50" value="11">
+    </div>
     <div class="flex-container">
       <button onclick="enableInsertText()">Insert text</button>
       <button onclick="enableDraw()">Draw</button>
@@ -26,6 +26,10 @@
     </div>
   </div>
   <div id="textInputMode" style="display: none;">
+    <div class="flex-container">
+      <label for="fontSizeText">Font size:</label>
+      <input type="number" id="fontSizeText" name="fontSizeText" min="1" max="50" value="11">
+    </div>
     <div>
       <label for="rowCount">Number of rows</label>
       <input type="number" name="rowCount" id="rowCount" min="1" max="15" value="5">

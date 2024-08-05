@@ -1,5 +1,6 @@
 const lineWidthInput = document.getElementById("brushSize");
-const fontSizeInput = document.getElementById("fontSize");
+const fontSizeInputDraw = document.getElementById("fontSizeDraw");
+const fontSizeInputText = document.getElementById("fontSizeText");
 const rowCountInput = document.getElementById("rowCount");
 const canvas = document.getElementById("screenCanvas");
 const ctx = canvas.getContext("2d");
@@ -25,18 +26,46 @@ canvas.addEventListener("mouseup", mouseUpEvent);
 clearCanvas();
 
 rowCountInput.addEventListener("change", showInputRows);
-rowCountInput.addEventListener("mousedown", e => {
-    rowCountInput.max = canvas.width / fontSizeInput.value;
-})
+rowCountInput.addEventListener("mousedown", setRowMax)
+fontSizeInputText.addEventListener("change", resizeInputRows);
+fontSizeInputText.addEventListener("mousedown", setTextFontMax);
+
 showInputRows();
 
 window.onload = function() {
+    // Load image
     const image = new Image();
     image.onload = function() {
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
     }
     image.onerror = function () {}
     image.src = "/image"
+
+    // Load text
+    fetch("get-text")
+        .then(r => {
+            if (!r.ok) {
+                throw new Error("Text request from server was not ok. Using default values.");
+            }
+
+            return r.json();
+        })
+        .then(data => {
+            rowCountInput.value = data.rows;
+            setTextFontMax()
+            fontSizeInputText.value = data.fontSize;
+            setRowMax()
+            resizeInputRows()
+            showInputRows()
+
+            let inputRows = document.getElementById("rowInputDiv").children;
+            for (let i = 0; i < data.content.length; i++) {
+                inputRows[i].value = data.content[i];
+            }
+        })
+        .catch (error => {
+            console.error("Error when fetching text data: " + error);
+        })
 }
 
 function drawRowsOnScreen() {
@@ -44,10 +73,10 @@ function drawRowsOnScreen() {
     let separator = document.getElementById("separatorLine").checked;
     let distributeHorizontally = document.getElementById("distributeHorizontally").checked;
     let rows = document.getElementById("rowInputDiv").children;
-    let rowSpace = fontSizeInput.value;
+    let rowSpace = fontSizeInputText.value;
     ctx.textBaseline = "middle";
     ctx.fillStyle = "black";
-    ctx.font = fontSizeInput.value + "px Arial";
+    ctx.font = fontSizeInputText.value + "px Arial";
 
     if (distributeHorizontally) {
         rowSpace = canvas.height / (rows.length + 1);
@@ -59,7 +88,7 @@ function drawRowsOnScreen() {
 
     if (separator && rows.length > 1) {
         for (let i = 0; i < rows.length - 1; i++) {
-            let y = rowSpace * (i + 1) + rowSpace / 2 - fontSizeInput.value / 3.5;
+            let y = rowSpace * (i + 1) + rowSpace / 2 - fontSizeInputText.value / 3.5;
             ctx.fillRect(0, y, canvas.width, 1);
         }
     }
@@ -68,7 +97,7 @@ function drawRowsOnScreen() {
 function resizeInputRows() {
     let rowInputDivChildren = document.getElementById("rowInputDiv").children;
     for (let i = 0; i < rowInputDivChildren.length; i++) {
-        rowInputDivChildren[i].style.fontSize = fontSizeInput.value + "px";
+        rowInputDivChildren[i].style.fontSize = fontSizeInputText.value + "px";
     }
 }
 
@@ -85,15 +114,19 @@ function showInputRows() {
         let rowInput = document.createElement("input");
         rowInput.type = "text";
         rowInput.style.width = canvas.width + "px";
-        rowInput.style.fontSize = fontSizeInput.value + "px";
+        rowInput.style.fontSize = fontSizeInputText.value + "px";
         rowInputDiv.appendChild(rowInput);
     }
 
     oldRowCount = rowCountInput.value;
 }
 
-function setFontMax() {
-    fontSizeInput.max = canvas.width / rowCountInput.value;
+function setTextFontMax() {
+    fontSizeInputText.max = canvas.width / rowCountInput.value;
+}
+
+function setRowMax() {
+    rowCountInput.max = canvas.width / fontSizeInputText.value;
 }
 
 function switchInput() {
@@ -105,10 +138,6 @@ function switchInput() {
         imageInputDiv.style.display = "initial";
         textInputMode.style.display = "none";
         switchInputBtn.innerHTML= "Switch to text input";
-        fontSizeInput.max = 50;
-        fontSizeInput.value = 11;
-        fontSizeInput.removeEventListener("change", resizeInputRows);
-        fontSizeInput.removeEventListener("mousedown", setFontMax);
         textInput = false;
         return;
     }
@@ -116,9 +145,6 @@ function switchInput() {
     imageInputDiv.style.display = "none";
     textInputMode.style.display = "initial";
     switchInputBtn.innerHTML = "Switch to draw input";
-    fontSizeInput.value = 11;
-    fontSizeInput.addEventListener("change", resizeInputRows);
-    fontSizeInput.addEventListener("mousedown", setFontMax);
     textInput = true;
 }
 
@@ -181,7 +207,7 @@ function addText(e) {
     input.type = "text";
     input.id = "newText";
     input.className = "canvasText";
-    input.style.fontSize = `${fontSizeInput.value}px`;
+    input.style.fontSize = `${fontSizeInputDraw.value}px`;
     input.style.left = `${startX}px`;
     input.style.top = `${startY}px`;
 
@@ -190,7 +216,7 @@ function addText(e) {
     input.addEventListener("focusout", e => {
         ctx.fillStyle = "black";
         ctx.textBaseLine = "hanging";
-        ctx.font = `${fontSizeInput.value}px Arial`;
+        ctx.font = `${fontSizeInputDraw.value}px Arial`;
         ctx.textBaseline = "top";
         ctx.fillText(input.value, startX - 1, startY - 1);
         input.remove();
@@ -238,7 +264,7 @@ function upload() {
             },
             body: JSON.stringify({
                 rows: rowCountInput.value,
-                fontSize: fontSizeInput.value,
+                fontSize: fontSizeInputText.value,
                 content: rows
             })
         })
