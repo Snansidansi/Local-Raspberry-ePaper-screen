@@ -34,7 +34,6 @@ def upload_image():
 @app.route('/clear-screen', methods=['POST'])
 def clear_screen():
     screen_controller.clear()
-    os.remove(image_path)
 
     if os.path.exists(image_path):
         os.remove(image_path)
