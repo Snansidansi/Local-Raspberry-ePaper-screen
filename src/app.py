@@ -6,8 +6,9 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 import screen.screen_controller as screen_controller
 
 app = Flask(__name__)
-image_path = "data/current_image.png"
-text_path = "data/current_text.txt"
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+image_path = os.path.join(ROOT_DIR, "data/current_image.png")
+text_path = os.path.join(ROOT_DIR, "data/current_text.txt")
 
 @app.route('/')
 def index():
@@ -93,8 +94,8 @@ def get_text():
 
 
 if __name__ == "__main__":
-    if not os.path.isdir("data"):
-        os.mkdir("data")
+    if not os.path.isdir(os.path.dirname(image_path)):
+        os.mkdir(os.path.dirname(image_path))
 
     screen_controller.enable_automatic_refresh(image_path)
     app.run(debug=False, host='0.0.0.0')
