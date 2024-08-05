@@ -1,5 +1,6 @@
 const lineWidthInput = document.getElementById("brushSize");
-const fontSizeInput = document.getElementById("fontSize")
+const fontSizeInput = document.getElementById("fontSize");
+const rowCountInput = document.getElementById("rowCount");
 const canvas = document.getElementById("screenCanvas");
 const ctx = canvas.getContext("2d");
 const canvasDiv = document.getElementById("canvasDiv");
@@ -16,10 +17,18 @@ let startX;
 let startY;
 let mode = ActionTypes.NONE;
 let uploadingImage = false;
+let textInput = false;
+let oldRowCount = 0;
 
 canvas.addEventListener("mousedown", startDrawing);
-canvas.addEventListener("mouse" + "up", mouseUpEvent);
+canvas.addEventListener("mouseup", mouseUpEvent);
 clearCanvas();
+
+rowCountInput.addEventListener("change", showInputRows);
+rowCountInput.addEventListener("mousedown", e => {
+    rowCountInput.max = canvas.width / fontSizeInput.value;
+})
+showInputRows();
 
 window.onload = function() {
     const image = new Image();
@@ -28,6 +37,89 @@ window.onload = function() {
     }
     image.onerror = function () {}
     image.src = "/image"
+}
+
+function drawRowsOnScreen() {
+    clearCanvas();
+    let separator = document.getElementById("separatorLine").checked;
+    let distributeHorizontally = document.getElementById("distributeHorizontally").checked;
+    let rows = document.getElementById("rowInputDiv").children;
+    let rowSpace = fontSizeInput.value;
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "black";
+    ctx.font = fontSizeInput.value + "px Arial";
+
+    if (distributeHorizontally) {
+        rowSpace = canvas.height / (rows.length + 1);
+    }
+
+    for (let i = 0; i < rows.length; i++) {
+        ctx.fillText(rows[i].value, 0, rowSpace * (i + 1));
+    }
+
+    if (separator && rows.length > 1) {
+        for (let i = 0; i < rows.length - 1; i++) {
+            let y = rowSpace * (i + 1) + rowSpace / 2 - fontSizeInput.value / 3.5;
+            ctx.fillRect(0, y, canvas.width, 1);
+        }
+    }
+}
+
+function resizeInputRows() {
+    let rowInputDivChildren = document.getElementById("rowInputDiv").children;
+    for (let i = 0; i < rowInputDivChildren.length; i++) {
+        rowInputDivChildren[i].style.fontSize = fontSizeInput.value + "px";
+    }
+}
+
+function showInputRows() {
+    let numberNewRows = rowCountInput.value - oldRowCount;
+    let rowInputDiv = document.getElementById("rowInputDiv");
+
+    while (numberNewRows < 0) {
+        rowInputDiv.lastChild.remove();
+        numberNewRows++;
+    }
+
+    for (let i = 0; i < numberNewRows; i++) {
+        let rowInput = document.createElement("input");
+        rowInput.type = "text";
+        rowInput.style.width = canvas.width + "px";
+        rowInput.style.fontSize = fontSizeInput.value + "px";
+        rowInputDiv.appendChild(rowInput);
+    }
+
+    oldRowCount = rowCountInput.value;
+}
+
+function setFontMax() {
+    fontSizeInput.max = canvas.width / rowCountInput.value;
+}
+
+function switchInput() {
+    let imageInputDiv = document.getElementById("imageInputDiv");
+    let textInputMode = document.getElementById("textInputMode");
+    let switchInputBtn = document.getElementById("switchInputBtn");
+
+    if (textInput) {
+        imageInputDiv.style.display = "initial";
+        textInputMode.style.display = "none";
+        switchInputBtn.innerHTML= "Switch to text input";
+        fontSizeInput.max = 50;
+        fontSizeInput.value = 11;
+        fontSizeInput.removeEventListener("change", resizeInputRows);
+        fontSizeInput.removeEventListener("mousedown", setFontMax);
+        textInput = false;
+        return;
+    }
+
+    imageInputDiv.style.display = "none";
+    textInputMode.style.display = "initial";
+    switchInputBtn.innerHTML = "Switch to draw input";
+    fontSizeInput.value = 11;
+    fontSizeInput.addEventListener("change", resizeInputRows);
+    fontSizeInput.addEventListener("mousedown", setFontMax);
+    textInput = true;
 }
 
 function calcStartPos(e) {
@@ -158,4 +250,4 @@ function upload() {
             console.error("Error when uploading image: ", error);
             uploadingImage = false;
         })
- }
+}

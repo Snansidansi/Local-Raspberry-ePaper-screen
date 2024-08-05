@@ -8,24 +8,43 @@
 </head>
 <body>
   <h1>Create the new content for the display</h1>
-  <div class="flex-container">
-    <button onclick="enableInsertText()">Insert text</button>
-    <button onclick="enableDraw()">Draw</button>
-    <button onclick="enableErase()">Eraser</button>
-    <button onclick="clearCanvas()">Clear</button>
-  </div>
+  <button id="switchInputBtn" onclick="switchInput()">Switch to text input</button>
   <div class="flex-container">
     <label for="fontSize">Font size:</label>
     <input type="number" id="fontSize" name="fontSize" min="1" max="50" value="11">
   </div>
-  <div class="flex-container">
-    <label for="brushSize">Brush size:</label>
-    <input type="number" id="brushSize" name="brushSize" min="1" max="100" value="3">
+  <div id="imageInputDiv">
+    <div class="flex-container">
+      <button onclick="enableInsertText()">Insert text</button>
+      <button onclick="enableDraw()">Draw</button>
+      <button onclick="enableErase()">Eraser</button>
+      <button onclick="clearCanvas()">Clear</button>
+    </div>
+    <div class="flex-container">
+      <label for="brushSize">Brush size:</label>
+      <input type="number" id="brushSize" name="brushSize" min="1" max="100" value="3">
+    </div>
+  </div>
+  <div id="textInputMode" style="display: none;">
+    <div>
+      <label for="rowCount">Number of rows</label>
+      <input type="number" name="rowCount" id="rowCount" min="1" max="15" value="5">
+    </div>
+    <div>
+      <label for="separatorLine">Separate rows with a line</label>
+      <input type="checkbox" name="separatorLine" id="separatorLine">
+    </div>
+    <div>
+      <label for="distributeHorizontally">Distribute rows horizontally</label>
+      <input type="checkbox" name="distributeHorizontally" id="distributeHorizontally">
+    </div>
+    <div id="rowInputDiv"></div>
+    <button onclick="drawRowsOnScreen()">Draw on screen</button>
   </div>
   <div id="canvasDiv">
     <canvas id="screenCanvas" width="200" height="200"></canvas>
   </div>
-  <div class="flex-box">
+  <div>
     <button onclick="upload()" id="uploadBtn">Upload</button>
     <form action="{{ url_for('clear_screen') }}" method="post">
       <button type="submit"> Clear screen</button>
