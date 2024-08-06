@@ -5,6 +5,7 @@ const rowCountInput = document.getElementById("rowCount");
 const canvas = document.getElementById("screenCanvas");
 const ctx = canvas.getContext("2d");
 const canvasDiv = document.getElementById("canvasDiv");
+const rotationSelect = document.getElementById("rotation");
 const ActionTypes = {
     NONE: 'NONE',
     TEXT: 'TEXT',
@@ -29,7 +30,6 @@ rowCountInput.addEventListener("change", showInputRows);
 rowCountInput.addEventListener("mousedown", setRowMax)
 fontSizeInputText.addEventListener("change", resizeInputRows);
 fontSizeInputText.addEventListener("mousedown", setTextFontMax);
-
 showInputRows();
 
 window.onload = function() {
@@ -66,6 +66,8 @@ window.onload = function() {
             for (let i = 0; i < data.content.length; i++) {
                 inputRows[i].value = data.content[i];
             }
+
+            rotationSelect.value = data.rotation;
         })
         .catch (error => {
             console.error("Error when fetching text data: " + error);
@@ -271,6 +273,7 @@ function upload() {
             fontSize: fontSizeInputText.value,
             separate: document.getElementById("separatorLine").checked,
             distribute: document.getElementById("distributeHorizontally").checked,
+            rotation: rotationSelect.value,
             content: rows
         })
     })
@@ -293,7 +296,10 @@ function upload() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({image: canvasDataURL})
+        body: JSON.stringify({
+            image: canvasDataURL,
+            rotation: rotationSelect.value
+        })
     })
         .then(r => r.json())
         .then(data => {
@@ -304,7 +310,6 @@ function upload() {
                 console.log("Upload of image failed: " + data.message);
             }
             uploadingImage = false;
-            let uploadBtn = document.getElementById("uploadBtn");
         })
         .catch(error => {
             console.error("Error when uploading image: ", error);

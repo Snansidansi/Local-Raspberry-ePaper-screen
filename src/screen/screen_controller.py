@@ -5,8 +5,8 @@ from . import epd1in54_V2
 from PIL import Image
 import os.path
 
-
 refreshing = False
+image_rotation = 0
 
 
 def init() -> epd1in54_V2.EPD:
@@ -28,7 +28,7 @@ def display_image(path: str):
     epd = init()
 
     # Display image
-    epd.display(epd.getbuffer(convert_image(path)))
+    epd.display(epd.getbuffer(convert_image(path).rotate(image_rotation)))
 
     # Sleep display
     epd.sleep()
@@ -47,7 +47,7 @@ def clear():
 
 
 def enable_automatic_refresh(path: str):
-    threading.Thread(target=automatic_refresh, args=(path, )).start()
+    threading.Thread(target=automatic_refresh, args=(path,)).start()
 
 
 def automatic_refresh(path: str):

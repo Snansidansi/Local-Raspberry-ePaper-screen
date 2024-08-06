@@ -49,6 +49,13 @@
     <canvas id="screenCanvas" width="200" height="200"></canvas>
   </div>
   <div>
+    <label for="rotation">Rotation of the image:</label>
+    <select name="rotation" id="rotation">
+      <option value="0">0°</option>
+      <option value="90">+90°</option>
+      <option value="180">180°</option>
+      <option value="270">-90°</option>
+    </select>
     <button onclick="upload()" id="uploadBtn">Upload</button>
     <form action="{{ url_for('clear_screen') }}" method="post">
       <button type="submit"> Clear screen</button>

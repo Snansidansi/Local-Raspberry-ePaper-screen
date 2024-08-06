@@ -19,6 +19,8 @@ def index():
 def upload_image():
     try:
         data = request.get_json()
+        screen_controller.image_rotation = int(data['rotation'])
+
         image_data = data['image'].replace('data:image/png;base64,', '')
         image_data = base64.b64decode(image_data)
 
@@ -56,6 +58,7 @@ def save_text():
         font_size = data['fontSize']
         separate = data['separate']
         distribute = data['distribute']
+        rotation = data['rotation']
         content = data['content']
 
         with open(text_path, "w") as file:
@@ -63,6 +66,7 @@ def save_text():
             file.write(font_size + "\n")
             file.write(str(separate) + "\n")
             file.write(str(distribute) + "\n")
+            file.write(rotation + "\n")
             for element in content:
                 file.write(element + "\n")
 
@@ -79,6 +83,7 @@ def get_text():
             fontSize = file.readline().replace("\n", "")
             separate = file.readline().replace("\n", "")
             distribute = file.readline().replace("\n", "")
+            rotation = file.readline().replace("\n", "")
             content = file.readlines()
 
         return jsonify({
@@ -86,6 +91,7 @@ def get_text():
             'fontSize': int(fontSize),
             'separate': False if separate == "False" else True,
             'distribute': False if distribute == "False" else True,
+            'rotation': rotation,
             'content': content
         }), 200
 
