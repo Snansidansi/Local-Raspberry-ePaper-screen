@@ -18,7 +18,6 @@ let drawing = false;
 let startX;
 let startY;
 let mode = ActionTypes.NONE;
-let uploadingImage = false;
 let textInput = false;
 let oldRowCount = 0;
 
@@ -255,10 +254,8 @@ function clearCanvas() {
 }
 
 function upload() {
-    if (uploadingImage) {
-        return;
-    }
-    uploadingImage = true;
+    const uploadBtn = document.getElementById("uploadBtn");
+    uploadBtn.disabled = true;
 
     let rows = Array.from(document.getElementById("rowInputDiv").children,
         row => row.value);
@@ -309,10 +306,10 @@ function upload() {
             else {
                 console.log("Upload of image failed: " + data.message);
             }
-            uploadingImage = false;
+            uploadBtn.disabled = false;
         })
         .catch(error => {
             console.error("Error when uploading image: ", error);
-            uploadingImage = false;
+            uploadBtn.disabled = false;
         })
 }

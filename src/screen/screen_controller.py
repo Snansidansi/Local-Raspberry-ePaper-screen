@@ -7,6 +7,7 @@ import os.path
 
 refreshing = False
 image_rotation = 0
+sleep_time = 2  # Refresh time of the e-Paper screen
 
 
 def init() -> epd1in54_V2.EPD:
@@ -21,7 +22,7 @@ def display_image(path: str):
 
     global refreshing
     while refreshing:
-        sleep(2)  # Refresh time of the e-Paper screen
+        sleep(sleep_time)
 
     # Init
     refreshing = True
@@ -41,9 +42,15 @@ def convert_image(path: str) -> Image:
 
 
 def clear():
+    global refreshing
+    while refreshing:
+        sleep(sleep_time)
+
+    refreshing = True
     epd = init()
     epd.Clear()
     epd.sleep()
+    refreshing = False
 
 
 def enable_automatic_refresh(path: str):
@@ -51,6 +58,11 @@ def enable_automatic_refresh(path: str):
 
 
 def automatic_refresh(path: str):
+    global refreshing
     while True:
         sleep(60 * 60 * 6)  # Refresh every 6h (manufacturer recommendation: refresh once between 3 min and 24 hours
+
+        while refreshing:
+            sleep(sleep_time)
+
         display_image(path)

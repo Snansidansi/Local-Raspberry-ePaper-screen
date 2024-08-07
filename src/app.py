@@ -10,6 +10,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 image_path = os.path.join(ROOT_DIR, "data/current_image.png")
 text_path = os.path.join(ROOT_DIR, "data/current_text.txt")
 
+
 @app.route('/')
 def index():
     return render_template("index.html")
