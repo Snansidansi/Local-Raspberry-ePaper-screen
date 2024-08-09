@@ -4,62 +4,80 @@
   <meta charset="UTF-8">
   <title>Screen setter</title>
   <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <h1>Create the new content for the display</h1>
-  <button id="switchInputBtn" onclick="switchInput()">Switch to text input</button>
-  <div id="imageInputDiv">
-    <div class="flex-container">
-      <label for="fontSizeDraw">Font size:</label>
-      <input type="number" id="fontSizeDraw" name="fontSizeDraw" min="1" max="50" value="11">
+  <div class="flex-container">
+    <div id="sidePanel">
+      <h2 class="sidebar-top-block sidebar-header">Tools</h2>
+
+      <div class="sidebar-block">
+        <h3 class="sidebar-header"> Drawing</h3>
+
+        <div class="button-bar">
+          <button onclick="enableInsertText()">Insert text</button>
+          <button onclick="enableDraw()">Draw</button>
+          <button onclick="enableErase()">Eraser</button>
+          <button onclick="clearCanvas()">Clear</button>
+        </div>
+
+        <div class="grid-container">
+          <label for="fontSizeDraw">Font size:</label>
+          <input type="number" id="fontSizeDraw" name="fontSizeDraw" min="1" max="50" value="11">
+
+          <label for="brushSize">Brush size:</label>
+          <input type="number" id="brushSize" name="brushSize" min="1" max="100" value="3">
+        </div>
+      </div>
+
+      <div class="sidebar-block">
+        <h3 class="sidebar-header">Text</h3>
+
+        <div class="grid-container">
+          <label for="fontSizeText">Font size:</label>
+          <input type="number" id="fontSizeText" name="fontSizeText" min="1" max="50" value="11">
+
+          <label for="rowCount">Number of rows:</label>
+          <input type="number" name="rowCount" id="rowCount" min="1" max="15" value="5">
+        </div>
+
+        <div class="grid-container">
+          <label for="separatorLine">Separate rows with a line:</label>
+          <input type="checkbox" name="separatorLine" id="separatorLine">
+
+          <label for="distributeHorizontally">Distribute rows horizontally:</label>
+          <input type="checkbox" name="distributeHorizontally" id="distributeHorizontally">
+        </div>
+
+        <div id="rowInputDiv"></div>
+        <button onclick="drawRowsOnScreen()">Draw on screen</button>
+      </div>
+
+      <div class="sidebar-block">
+        <h3 class="sidebar-header">Upload</h3>
+
+        <div>
+          <label for="rotation">Rotation of the image:</label>
+          <select name="rotation" id="rotation">
+            <option value="0">0°</option>
+            <option value="90">+90°</option>
+            <option value="180">180°</option>
+            <option value="270">-90°</option>
+          </select>
+        </div>
+
+        <div class="button-bar">
+          <form action="{{ url_for('clear_screen') }}" method="post">
+            <button type="submit"> Clear screen</button>
+          </form>
+          <button onclick="upload()" id="uploadBtn">Upload</button>
+        </div>
+      </div>
     </div>
-    <div class="flex-container">
-      <button onclick="enableInsertText()">Insert text</button>
-      <button onclick="enableDraw()">Draw</button>
-      <button onclick="enableErase()">Eraser</button>
-      <button onclick="clearCanvas()">Clear</button>
+
+    <div id="canvasDiv">
+      <canvas id="screenCanvas" width="200" height="200"></canvas>
     </div>
-    <div class="flex-container">
-      <label for="brushSize">Brush size:</label>
-      <input type="number" id="brushSize" name="brushSize" min="1" max="100" value="3">
-    </div>
-  </div>
-  <div id="textInputMode" style="display: none;">
-    <div class="flex-container">
-      <label for="fontSizeText">Font size:</label>
-      <input type="number" id="fontSizeText" name="fontSizeText" min="1" max="50" value="11">
-    </div>
-    <div>
-      <label for="rowCount">Number of rows</label>
-      <input type="number" name="rowCount" id="rowCount" min="1" max="15" value="5">
-    </div>
-    <div>
-      <label for="separatorLine">Separate rows with a line</label>
-      <input type="checkbox" name="separatorLine" id="separatorLine">
-    </div>
-    <div>
-      <label for="distributeHorizontally">Distribute rows horizontally</label>
-      <input type="checkbox" name="distributeHorizontally" id="distributeHorizontally">
-    </div>
-    <div id="rowInputDiv"></div>
-    <button onclick="drawRowsOnScreen()">Draw on screen</button>
-  </div>
-  <div id="canvasDiv">
-    <canvas id="screenCanvas" width="200" height="200"></canvas>
-  </div>
-  <div>
-    <label for="rotation">Rotation of the image:</label>
-    <select name="rotation" id="rotation">
-      <option value="0">0°</option>
-      <option value="90">+90°</option>
-      <option value="180">180°</option>
-      <option value="270">-90°</option>
-    </select>
-    <button onclick="upload()" id="uploadBtn">Upload</button>
-    <form action="{{ url_for('clear_screen') }}" method="post">
-      <button type="submit"> Clear screen</button>
-    </form>
   </div>
 </body>
 </html>

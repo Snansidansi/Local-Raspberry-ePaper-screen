@@ -1,0 +1,152 @@
+:root {
+    --element-background: #454545;
+    --hover: #888888;
+    --active: #aaaaaa;
+}
+
+body {
+    background-color: #3c3c3c;
+    margin: 0;
+    color: #dddddd;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+}
+
+#sidePanel {
+    background-color: #171717;
+    box-sizing: border-box;
+    width: 400px;
+    height: 100vh;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--element-background);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--hover);
+}
+
+::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-thumb:active {
+    background-color: var(--active);
+}
+
+.sidebar-block {
+    border-width: 1px 0 0 0;
+    border-color: #ffffff;
+    padding: 1rem 0 1rem 0;
+    border-style: solid;
+}
+
+.sidebar-block > * {
+    margin-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-header {
+    text-align: left;
+    margin: 0 0 1rem 0.5rem;
+    color: white;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+}
+
+.sidebar-top-block {
+    text-align: center;
+    margin: 0 0 1rem 0;
+}
+
+.button-bar {
+    display: flex;
+    gap: 7px
+}
+
+button {
+    background-color: var(--element-background);
+    border-radius: 5px;
+    color: white;
+    border-style: none;
+    padding: 0.25rem;
+}
+
+button:hover {
+    background-color: var(--hover);
+}
+
+button:active {
+    background-color: var(--active);
+}
+
+input[type=number], input[type=text] {
+    width: 3em;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #787878;
+    border-width: 2px;
+    background-color: var(--element-background);
+    color: white;
+}
+
+input[type=number]:focus, input[type=text]:focus {
+    border-color: #c1c1c1;
+    outline: none;
+}
+
+.grid-container {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    column-gap: 5px;
+    row-gap: 0.5rem;
+}
+
+#rowInputDiv {
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+select {
+    background-color: var(--element-background);
+    border-radius: 5px;
+    border-color: var(--active);
+    color: white;
+}
+
+select select {
+    background-color: white;
+}
+
+#canvasDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+canvas {
+    border-width: 2px;
+    border-color: #171717;
+    border-style: solid;
+}
+
+.canvasText {
+    position: absolute;
+    border-style: none;
+    background: transparent;
+}
+
+.canvasText:focus {
+    border-width: 1px;
+}
