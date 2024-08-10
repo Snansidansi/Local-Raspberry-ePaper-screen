@@ -18,8 +18,7 @@ let drawing = false;
 let startX;
 let startY;
 let mode = ActionTypes.NONE;
-let textInput = false;
-let oldRowCount = 0;
+let oldRowCount = 0
 
 canvas.addEventListener("mousedown", startDrawing);
 canvas.addEventListener("mouseup", mouseUpEvent);
@@ -132,26 +131,6 @@ function setTextFontMax() {
 
 function setRowMax() {
     rowCountInput.max = canvas.width / fontSizeInputText.value;
-}
-
-function switchInput() {
-    let imageInputDiv = document.getElementById("imageInputDiv");
-    let textInputMode = document.getElementById("textInputMode");
-    let switchInputBtn = document.getElementById("switchInputBtn");
-
-    if (textInput) {
-        imageInputDiv.style.display = "initial";
-        textInputMode.style.display = "none";
-        switchInputBtn.innerHTML= "Switch to text input";
-        textInput = false;
-        return;
-    }
-
-    imageInputDiv.style.display = "none";
-    textInputMode.style.display = "initial";
-    switchInputBtn.innerHTML = "Switch to draw input";
-    textInput = true;
-    mode = ActionTypes.NONE;
 }
 
 function calcStartPos(e) {
