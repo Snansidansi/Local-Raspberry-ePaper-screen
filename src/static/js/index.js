@@ -22,7 +22,7 @@ let oldRowCount = 0
 canvas.addEventListener("mousedown", startMouseDrawing);
 canvas.addEventListener("touchstart", startTouchDrawing);
 canvas.addEventListener("mouseup", mouseUpEvent);
-canvas.addEventListener("touchend", mouseUpEvent);
+canvas.addEventListener("touchend", touchEndEvent);
 clearCanvas();
 
 rowCountInput.addEventListener("change", showInputRows);
@@ -209,8 +209,6 @@ function draw(absX, absY) {
     let x = absX - canvasBoundingRec.left;
     let y = absY - canvasBoundingRec.top;
 
-    console.log("x: " + x + "; y: " + y);
-
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.lineWidth = lineWidthInput.value;
@@ -220,16 +218,21 @@ function draw(absX, absY) {
 
 function mouseUpEvent(e) {
     endDrawing();
-    addText(e);
+
+    const absPos = getMousePos(e);
+    addText(absPos.x, absPos.y);
 }
 
-function addText(e) {
+function touchEndEvent(e) {
+    endDrawing();
+}
+
+function addText(absX, absY) {
     if (mode !== ActionTypes.TEXT) {
         return;
     }
 
-    const absPos = getMousePos(e);
-    calcStartPos(absPos.x, absPos.y);
+    calcStartPos(absX, absY);
 
     let input = document.createElement("input");
     input.type = "text";
@@ -238,6 +241,7 @@ function addText(e) {
     input.style.fontSize = `${fontSizeInputDraw.value}px`;
     input.style.left = `${startX}px`;
     input.style.top = `${startY}px`;
+    input.style.width = `${canvas.width - startX}px`;
 
     canvasDiv.appendChild(input);
     input.focus();

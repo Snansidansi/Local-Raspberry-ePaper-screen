@@ -175,7 +175,6 @@ canvas {
     position: absolute;
     border-style: none;
     background-color: transparent;
-    width: fit-content;
     color: black;
 }
 
