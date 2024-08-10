@@ -13,15 +13,16 @@ const ActionTypes = {
     ERASE: 'ERASE'
 };
 
-let canvasBoundingRec = canvas.getBoundingClientRect();
 let drawing = false;
 let startX;
 let startY;
 let mode = ActionTypes.NONE;
 let oldRowCount = 0
 
-canvas.addEventListener("mousedown", startDrawing);
+canvas.addEventListener("mousedown", startMouseDrawing);
+canvas.addEventListener("touchstart", startTouchDrawing);
 canvas.addEventListener("mouseup", mouseUpEvent);
+canvas.addEventListener("touchend", mouseUpEvent);
 clearCanvas();
 
 rowCountInput.addEventListener("change", showInputRows);
@@ -133,9 +134,10 @@ function setRowMax() {
     rowCountInput.max = canvas.width / fontSizeInputText.value;
 }
 
-function calcStartPos(e) {
-    startX = e.clientX - canvasBoundingRec.left;
-    startY = e.clientY - canvasBoundingRec.top;
+function calcStartPos(absX, absY) {
+    let canvasBoundingRec = canvas.getBoundingClientRect();
+    startX = absX - canvasBoundingRec.left;
+    startY = absY - canvasBoundingRec.top;
 }
 
 function enableInsertText() {
@@ -147,7 +149,32 @@ function enableDraw(){
     ctx.strokeStyle = "black";
 }
 
-function startDrawing(e) {
+function getMousePos(e) {
+    return {
+        x: e.clientX,
+        y: e.clientY
+    }
+}
+
+function getTouchPos(e) {
+    const touch = e.touches[0];
+    return {
+        x: touch.clientX,
+        y: touch.clientY
+    }
+}
+
+function startTouchDrawing(e) {
+    const absPos = getTouchPos(e);
+    startDrawing(absPos.x, absPos.y);
+}
+
+function startMouseDrawing(e) {
+    const absPos = getMousePos(e);
+    startDrawing(absPos.x, absPos.y);
+}
+
+function startDrawing(absX, absY) {
     if (mode === ActionTypes.ERASE) {
         ctx.strokeStyle = "white";
     }
@@ -155,20 +182,34 @@ function startDrawing(e) {
         return;
     }
 
-    calcStartPos(e);
+    calcStartPos(absX, absY);
     ctx.moveTo(startX, startY);
     drawing = true;
 
-    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mousemove", mouseDraw);
+    canvas.addEventListener("touchmove", touchDraw);
 }
 
-function draw(e) {
+function touchDraw(e) {
+    const absPos = getTouchPos(e);
+    draw(absPos.x, absPos.y);
+}
+
+function mouseDraw(e) {
+    const absPos = getMousePos(e);
+    draw(absPos.x, absPos.y);
+}
+
+function draw(absX, absY) {
     if (!drawing) {
         return;
     }
 
-    let x = e.clientX - canvasBoundingRec.left;
-    let y = e.clientY - canvasBoundingRec.top;
+    let canvasBoundingRec = canvas.getBoundingClientRect();
+    let x = absX - canvasBoundingRec.left;
+    let y = absY - canvasBoundingRec.top;
+
+    console.log("x: " + x + "; y: " + y);
 
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -187,7 +228,9 @@ function addText(e) {
         return;
     }
 
-    calcStartPos(e);
+    const absPos = getMousePos(e);
+    calcStartPos(absPos.x, absPos.y);
+
     let input = document.createElement("input");
     input.type = "text";
     input.id = "newText";
@@ -220,7 +263,8 @@ function endDrawing() {
         return;
     }
 
-    canvas.removeEventListener("mousemove", draw);
+    canvas.removeEventListener("mousemove", mouseDraw);
+    canvas.removeEventListener("touchmove", touchDraw);
 }
 
 function enableErase() {

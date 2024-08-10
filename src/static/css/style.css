@@ -168,6 +168,7 @@ canvas {
     border-width: 2px;
     border-color: #171717;
     border-style: solid;
+    touch-action: none;
 }
 
 #newText {
