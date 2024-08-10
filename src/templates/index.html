@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Screen setter</title>
   <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <div class="flex-container">
+  <div class="main-container">
     <div id="sidePanel">
       <h2 class="sidebar-top-block sidebar-header">Tools</h2>
 
@@ -75,7 +76,7 @@
       </div>
     </div>
 
-    <div class="main-container">
+    <div class="canvas-container">
       <div id="canvasDiv">
         <canvas id="screenCanvas" width="200" height="200"></canvas>
       </div>

@@ -10,19 +10,33 @@ body {
     color: #dddddd;
 }
 
-.flex-container {
+.main-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 #sidePanel {
     background-color: #171717;
     box-sizing: border-box;
-    width: 400px;
-    height: 100vh;
     padding: 2rem;
-    overflow-y: auto;
+    width: 100vw;
+    height: fit-content;
 }
+
+@media (min-width: 33em) {
+    .main-container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #sidePanel {
+        width: fit-content;
+        min-width: fit-content;
+        height: 100vh;
+        overflow-y: auto;
+    }
+}
+
 
 ::-webkit-scrollbar {
     width: 15px;
@@ -45,6 +59,8 @@ body {
     border-color: #ffffff;
     padding: 1rem 0 1rem 0;
     border-style: solid;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar-block > * {
@@ -103,8 +119,9 @@ input[type=number]:focus, input[type=text]:focus {
 
 .grid-container {
     display: inline-grid;
+    justify-content: start;
     grid-template-columns: auto auto;
-    column-gap: 5px;
+    column-gap: 0.5em;
     row-gap: 0.5rem;
 }
 
@@ -126,12 +143,21 @@ select select {
     background-color: white;
 }
 
-.main-container {
+.canvas-container {
+    flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100vh;
+    height: fit-content;
+    margin: 2em 0;
+}
+
+@media (min-width: 33em) {
+    .canvas-container {
+        height: 100vh;
+        margin: 0;
+    }
 }
 
 #canvasDiv {
