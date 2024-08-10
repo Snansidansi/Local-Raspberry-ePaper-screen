@@ -126,13 +126,16 @@ select select {
     background-color: white;
 }
 
-#canvasDiv {
+.main-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
     width: 100%;
     height: 100vh;
+}
+
+#canvasDiv {
+    position: relative;
 }
 
 canvas {
@@ -141,12 +144,14 @@ canvas {
     border-style: solid;
 }
 
-.canvasText {
+#newText {
     position: absolute;
     border-style: none;
-    background: transparent;
+    background-color: transparent;
+    width: fit-content;
+    color: black;
 }
 
-.canvasText:focus {
+#newText:focus {
     border-width: 1px;
 }
