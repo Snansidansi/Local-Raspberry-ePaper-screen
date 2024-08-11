@@ -29,7 +29,9 @@ Setup the Raspberry Pi according to the [Waveshare manual](https://www.waveshare
 2. Glue the magnet into the round mount hole.
 3. Place the e-Paper screen into the mount.
 ## Web server
-Clone the repository on the Raspberry Pi and run the app.py file in the src directory.
+1. Clone the repository on the Raspberry Pi.
+2. Install the pip-packages from the requirements.txt.
+3. Run the app.py file in the src directory.
 # Demo Images
 ## Web server
 <img src="../media/images/website.png?raw=true" width="500">
