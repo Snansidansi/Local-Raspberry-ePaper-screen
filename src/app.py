@@ -60,11 +60,11 @@ def save_text():
         content = data['content']
 
         with open(text_path, "w") as file:
+            file.write(rotation + "\n")
             file.write(rows + "\n")
             file.write(font_size + "\n")
             file.write(str(separate) + "\n")
             file.write(str(distribute) + "\n")
-            file.write(rotation + "\n")
             for element in content:
                 file.write(element + "\n")
 
@@ -77,11 +77,11 @@ def save_text():
 def get_text():
     try:
         with open(text_path, "r") as file:
+            rotation = file.readline().replace("\n", "")
             rowCount = file.readline().replace("\n", "")
             fontSize = file.readline().replace("\n", "")
             separate = file.readline().replace("\n", "")
             distribute = file.readline().replace("\n", "")
-            rotation = file.readline().replace("\n", "")
             content = file.readlines()
 
         return jsonify({
@@ -100,6 +100,10 @@ def get_text():
 if __name__ == "__main__":
     if not os.path.isdir(os.path.dirname(image_path)):
         os.mkdir(os.path.dirname(image_path))
+
+    if os.path.exists(text_path):
+        with open(text_path, "r") as file:
+            screen_controller.image_rotation = int(file.readline().replace("\n", ""))
 
     screen_controller.enable_automatic_refresh(image_path)
     app.run(debug=False, host='0.0.0.0')
